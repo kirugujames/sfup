@@ -50,7 +50,7 @@ app.use(cors());
 
 // Load environment variables
 const PORT = process.env.PORT || 3000;
-const BASE_URL = process.env.BASE_URL || 'http://localhost';
+const BASE_URL = process.env.BASE_URL || '';
 
 // Swagger setup
 export const swaggerOptions = {
