@@ -50,18 +50,43 @@ app.use(cors());
 
 // Load environment variables
 const PORT = process.env.PORT || 3000;
-const BASE_URL = process.env.BASE_URL || '';
 
-// Swagger setup
-export const swaggerOptions = {
+// Detect the server URL dynamically
+// Railway provides RAILWAY_PUBLIC_DOMAIN or we can check for Railway environment
+const getServerUrl = () => {
+  // Check if running on Railway
+  if (process.env.RAILWAY_PUBLIC_DOMAIN) {
+    return `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`;
+  }
+  
+  // Check if PUBLIC_URL is set
+  if (process.env.PUBLIC_URL) {
+    return process.env.PUBLIC_URL;
+  }
+  
+  // Fallback to localhost for development
+  return `http://localhost:${PORT}`;
+};
+
+const BASE_URL = getServerUrl();
+
+console.log(`🌐 Server URL: ${BASE_URL}`);
+
+// Swagger setup with dynamic server detection
+const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "My Express API",
+      title: "Shikana Frontliner Party API",
       version: "1.0.0",
       description: "API documentation for Shikana Frontliner Party",
     },
-    servers: [{ url: `${BASE_URL}:${PORT}`, description: "Development Server" }],
+    servers: [
+      { 
+        url: BASE_URL,
+        description: process.env.RAILWAY_ENVIRONMENT ? "Production Server" : "Development Server"
+      }
+    ],
     tags: [
       { name: "Auth", description: "Authentication and account management APIs" },
       { name: "Member", description: "Member registration and profile management APIs" },
@@ -154,8 +179,8 @@ app.use((err, req, res, next) => {
     app.use("/api/locations", locationRouter);
 
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-      console.log(`Swagger docs available at ${BASE_URL}:${PORT}/api-docs`);
+      console.log(`✅ Server running on port ${PORT}`);
+      console.log(`📚 Swagger docs available at ${BASE_URL}/api-docs`);
     });
   } catch (err) {
     console.error("Failed to initialize database:", err.message);
