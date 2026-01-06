@@ -181,7 +181,7 @@ app.use((err, req, res, next) => {
     app.use("/api/locations", locationRouter);
 
     app.listen(PORT, () => {
-      console.log(`✅ Server running on port ${PORT}`);
+      console.log(` Server running on port ${PORT}`);
       console.log(`📚 Swagger docs available at ${BASE_URL}/api-docs`);
     });
   } catch (err) {

@@ -248,7 +248,7 @@ router.get("/get/member/idno/:idNo", auditMiddleware("MEMBER_GET_BY_IDNO"), asyn
  *       500:
  *         description: Internal server error
  */
-router.patch("/deactivate/idno/:idNo", verifyToken, auditMiddleware("MEMBER_DEACTIVATE"), async (req, res) => {
+router.patch("/deactivate/idno/:idNo", auditMiddleware("MEMBER_DEACTIVATE"), async (req, res) => {
   const idNo = req.params.idNo;
   const results = await deactivateMemberByIdNo(idNo);
   return res.status(results.statusCode).send(results);
