@@ -46,7 +46,7 @@ export async function registerUserAsMember(username, password, role_id, email) {
       return { statusCode: 409, message: "Username already exists", data: null };
 
     const hashedPassword = await bcrypt.hash(password.trim(), 10);
-    const user = await User.create({ email, password: hashedPassword, email, role_id });
+    const user = await User.create({ username: email, password: hashedPassword, email, role_id });
     console.log("user created", user);
     await sendEmail({
       to: email,
