@@ -162,7 +162,7 @@ app.use((err, req, res, next) => {
     console.log("Database connected successfully");
 
     // Sync models and create/update tables
-    // await sequelize.sync({ alter: true });
+    await sequelize.sync({ alter: true });
     console.log("Tables created/updated successfully");
 
     // Routes
