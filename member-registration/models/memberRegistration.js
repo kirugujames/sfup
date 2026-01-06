@@ -79,7 +79,7 @@ const MemberRegistration = sequelize.define(
       unique: true,
     },
     status: {
-      type: DataTypes.ENUM("active", "withdrawn"),
+      type: DataTypes.ENUM("active", "withdrawn", "inactive"),
       defaultValue: "active",
     },
     is_paid: {

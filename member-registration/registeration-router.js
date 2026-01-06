@@ -5,6 +5,7 @@ import {
   registerMember,
   getMember,
   getMemberByIdNo,
+  deactivateMemberByIdNo,
   deleteMember,
   updateMember,
 } from "./register-controller.js";
@@ -223,6 +224,34 @@ router.get("/get/member/idno/:idNo", auditMiddleware("MEMBER_GET_BY_IDNO"), asyn
   const idNo = req.params.idNo;
   const results = await getMemberByIdNo(idNo);
   return res.send(results);
+});
+
+/**
+ * @swagger
+ * /api/members/deactivate/idno/{idNo}:
+ *   patch:
+ *     summary: Deactivate a member by National ID
+ *     description: Sets a member's status to inactive based on their National ID
+ *     tags: [Member]
+ *     parameters:
+ *       - in: path
+ *         name: idNo
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The member's National ID
+ *     responses:
+ *       200:
+ *         description: Member deactivated successfully
+ *       404:
+ *         description: Member not found
+ *       500:
+ *         description: Internal server error
+ */
+router.patch("/deactivate/idno/:idNo", verifyToken, auditMiddleware("MEMBER_DEACTIVATE"), async (req, res) => {
+  const idNo = req.params.idNo;
+  const results = await deactivateMemberByIdNo(idNo);
+  return res.status(results.statusCode).send(results);
 });
 
 /**

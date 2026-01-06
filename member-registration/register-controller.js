@@ -164,7 +164,7 @@ export async function getMember(id) {
 export async function getMemberByIdNo(idNo) {
   try {
     const member = await MemberRegistration.findOne({ where: { idNo } });
-    if (!member) {
+    if (!member || member.status === "inactive") {
       return {
         message: "Member not found with that ID number",
         data: null,
@@ -173,6 +173,33 @@ export async function getMemberByIdNo(idNo) {
     }
     return {
       message: "Member fetched successfully",
+      data: member,
+      statusCode: 200,
+    };
+  } catch (error) {
+    return {
+      message: error.message,
+      data: null,
+      statusCode: 500,
+    };
+  }
+}
+
+// Deactivate member by National ID
+export async function deactivateMemberByIdNo(idNo) {
+  try {
+    const member = await MemberRegistration.findOne({ where: { idNo } });
+    if (!member) {
+      return {
+        message: "Member not found with that ID number",
+        data: null,
+        statusCode: 404,
+      };
+    }
+
+    await member.update({ status: "inactive" });
+    return {
+      message: "Member deactivated successfully",
       data: member,
       statusCode: 200,
     };
