@@ -1,22 +1,9 @@
-import nodemailer from "nodemailer";
+import { Resend } from 'resend';
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
-
-transporter
-  .verify()
-  .then(() => {
-    console.log("Gmail transporter ready");
-  })
-  .catch((err) => console.error("Transporter error", err));
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendEmail(req) {
   if (!req.to || !req.subject || !req.message) {
@@ -28,20 +15,19 @@ export async function sendEmail(req) {
   }
 
   try {
-    const info = await transporter.sendMail({
-      from: `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`,
+    const data = await resend.emails.send({
+      from: 'Shikana Frontliners <onboarding@resend.dev>',
       to: req.to,
       subject: req.subject,
       text: req.message,
       html: `<p>${req.message}</p>`,
     });
 
-    console.log("Email sent:", info.response);
+    console.log("Email sent:", data.id);
 
     return {
       success: true,
-      messageId: info.messageId,
-      response: info.response,
+      messageId: data.id,
       status: 200,
     };
   } catch (error) {
