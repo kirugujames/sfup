@@ -52,9 +52,12 @@ export async function createEvent(req) {
 
 }
 //get all  events
-export async function getAllEvents() {
+export async function getAllEvents(req) {
+    const { limit } = req.query;
     try {
-        const result = await Events.findAll()
+        const result = await Events.findAll({
+            limit: limit ? parseInt(limit) : undefined
+        })
         return {
             message: "Events fetched successfully",
             statusCode: 200,

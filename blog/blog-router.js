@@ -175,6 +175,14 @@ router.get("/getMainBlog", async (req, res) => {
  *     summary: Get all blog posts
  *     description: Fetches all blog posts from the system, including title, category, author, and content.
  *     tags: [Blog]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: The maximum number of blog posts to retrieve.
+ *         example: 3
  *     responses:
  *       200:
  *         description: Successfully retrieved all blog posts
@@ -217,7 +225,7 @@ router.get("/getMainBlog", async (req, res) => {
  *         description: Internal server error
  */
 router.get("/all", async (req, res) => {
-  const response = await getAllBlog();
+  const response = await getAllBlog(req);
   return res.send(response);
 });
 

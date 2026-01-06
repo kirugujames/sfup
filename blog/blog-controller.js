@@ -3,9 +3,12 @@ import BlogCategory from "./Models/BlogCategory.js";
 import Comment from "./Models/Comments.js";
 
 // Get all blogs
-export async function getAllBlog() {
+export async function getAllBlog(req) {
+  const { limit } = req.query;
   try {
-    const blogs = await Blog.findAll();
+    const blogs = await Blog.findAll({
+      limit: limit ? parseInt(limit) : undefined
+    });
     return { message: "Blogs fetched successfully", data: blogs, statusCode: 200 };
   } catch (error) {
     return { message: error.message, error: error.message, statusCode: 500 };

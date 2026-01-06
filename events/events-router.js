@@ -149,6 +149,14 @@ router.post("/add", validateEventCreation, verifyToken, auditMiddleware("EVENT_C
  *     summary: Retrieve all events
  *     tags: [Events]
  *     description: Returns a list of all events stored in the system.
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: The maximum number of events to retrieve.
+ *         example: 3
  *     responses:
  *       200:
  *         description: A list of events.
@@ -201,7 +209,7 @@ router.post("/add", validateEventCreation, verifyToken, auditMiddleware("EVENT_C
  *                     example: "100.00"
  */
 router.get("/all", async (req, res) => {
-  const result = await getAllEvents();
+  const result = await getAllEvents(req);
   return res.send(result);
 });
 
