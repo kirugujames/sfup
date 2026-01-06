@@ -6,6 +6,7 @@ import {
     bulkInsertCounties,
     bulkInsertSubcounties,
     bulkInsertWards,
+    seedLocations,
 } from "./location-controller.js";
 import { verifyToken } from "../utils/jwtInterceptor.js";
 import { auditMiddleware } from "../utils/audit-service.js";
@@ -272,6 +273,26 @@ router.post("/subcounties/bulk", verifyToken, auditMiddleware("LOCATION_SUBCOUNT
  */
 router.post("/wards/bulk", verifyToken, auditMiddleware("LOCATION_WARDS_BULK"), async (req, res) => {
     const result = await bulkInsertWards(req);
+    return res.status(result.statusCode).json(result);
+});
+
+/**
+ * @swagger
+ * /api/locations/seed:
+ *   post:
+ *     summary: Seed locations from JSON file
+ *     description: Admin endpoint to seed all counties, subcounties, and wards from the local JSON data file
+ *     tags: [Locations]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       201:
+ *         description: Locations seeded successfully
+ *       500:
+ *         description: Server error during seeding
+ */
+router.post("/seed", auditMiddleware("LOCATION_SEED"), async (req, res) => {
+    const result = await seedLocations();
     return res.status(result.statusCode).json(result);
 });
 
