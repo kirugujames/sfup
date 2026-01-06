@@ -56,7 +56,7 @@ const Events = sequelize.define("Events", {
     },
     amount: {
         type: DataTypes.INTEGER,
-        defaultValue: "",
+        defaultValue: 0,
         allowNull: true
     }
 }, {
