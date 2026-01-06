@@ -34,11 +34,11 @@ const validateEventCreation = [
   body("to_time").notEmpty().withMessage("To time is required"),
   body("location").notEmpty().withMessage("Location is required"),
   body("description").notEmpty().withMessage("Description is required"),
-  body("sub_title").notEmpty().withMessage("Subtitle is required"),
   body("image").notEmpty().withMessage("Image is required"),
+  body("sub_title").optional().isString().withMessage("Subtitle must be a string"),
   body("is_main").optional().isBoolean().withMessage("is_main must be a boolean"),
   body("isPaid").optional().isBoolean().withMessage("isPaid must be a boolean"),
-  body("amount").optional().isString().withMessage("amount must be a string"),
+  body("amount").optional().isNumeric().withMessage("amount must be a number"),
 ];
 
 /**
@@ -64,7 +64,6 @@ const validateEventCreation = [
  *               - to_time
  *               - location
  *               - description
- *               - sub_title
  *               - image
  *             properties:
  *               event_type:
@@ -102,8 +101,8 @@ const validateEventCreation = [
  *                 type: boolean
  *                 example: false
  *               amount:
- *                 type: string
- *                 example: "100.00"
+ *                 type: integer
+ *                 example: 100
  *     responses:
  *       200:
  *         description: Event created successfully
@@ -205,8 +204,8 @@ router.post("/add", validateEventCreation, verifyToken, auditMiddleware("EVENT_C
  *                     type: boolean
  *                     example: false
  *                   amount:
- *                     type: string
- *                     example: "100.00"
+ *                     type: integer
+ *                     example: 100
  */
 router.get("/all", async (req, res) => {
   const result = await getAllEvents(req);
@@ -279,8 +278,8 @@ router.get("/landing", async (req, res) => {
  *                   type: boolean
  *                   example: false
  *                 amount:
- *                   type: string
- *                   example: "100.00"
+ *                   type: integer
+ *                   example: 100
  *       404:
  *         description: Event not found
  *       500:
@@ -386,8 +385,8 @@ router.delete("/delete/:id", verifyToken, auditMiddleware("EVENT_DELETE"), async
  *                 type: boolean
  *                 example: false
  *               amount:
- *                 type: string
- *                 example: "100.00"
+ *                 type: integer
+ *                 example: 100
  *     responses:
  *       200:
  *         description: Event updated successfully
