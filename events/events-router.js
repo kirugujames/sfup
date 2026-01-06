@@ -36,6 +36,9 @@ const validateEventCreation = [
   body("description").notEmpty().withMessage("Description is required"),
   body("sub_title").notEmpty().withMessage("Subtitle is required"),
   body("image").notEmpty().withMessage("Image is required"),
+  body("is_main").optional().isBoolean().withMessage("is_main must be a boolean"),
+  body("isPaid").optional().isBoolean().withMessage("isPaid must be a boolean"),
+  body("amount").optional().isString().withMessage("amount must be a string"),
 ];
 
 /**
@@ -92,6 +95,15 @@ const validateEventCreation = [
  *               image:
  *                 type: string
  *                 example: "base64encodedimage=="
+ *               is_main:
+ *                 type: boolean
+ *                 example: false
+ *               isPaid:
+ *                 type: boolean
+ *                 example: false
+ *               amount:
+ *                 type: string
+ *                 example: "100.00"
  *     responses:
  *       200:
  *         description: Event created successfully
@@ -178,6 +190,15 @@ router.post("/add", validateEventCreation, verifyToken, auditMiddleware("EVENT_C
  *                   image:
  *                     type: string
  *                     example: base64encodedimage==
+ *                   is_main:
+ *                     type: boolean
+ *                     example: false
+ *                   isPaid:
+ *                     type: boolean
+ *                     example: false
+ *                   amount:
+ *                     type: string
+ *                     example: "100.00"
  */
 router.get("/all", async (req, res) => {
   const result = await getAllEvents();
@@ -243,6 +264,15 @@ router.get("/landing", async (req, res) => {
  *                 image:
  *                   type: string
  *                   example: base64encodedimage==
+ *                 is_main:
+ *                   type: boolean
+ *                   example: false
+ *                 isPaid:
+ *                   type: boolean
+ *                   example: false
+ *                 amount:
+ *                   type: string
+ *                   example: "100.00"
  *       404:
  *         description: Event not found
  *       500:
@@ -341,6 +371,15 @@ router.delete("/delete/:id", verifyToken, auditMiddleware("EVENT_DELETE"), async
  *                 type: string
  *                 description: Base64 encoded image string
  *                 example: base64encodedimage==
+ *               is_main:
+ *                 type: boolean
+ *                 example: false
+ *               isPaid:
+ *                 type: boolean
+ *                 example: false
+ *               amount:
+ *                 type: string
+ *                 example: "100.00"
  *     responses:
  *       200:
  *         description: Event updated successfully

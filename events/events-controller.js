@@ -16,6 +16,9 @@ export async function createEvent(req) {
         description,
         sub_title,
         image,
+        is_main,
+        isPaid,
+        amount,
     } = req.body;
     try {
         const result = await Events.create({
@@ -27,7 +30,10 @@ export async function createEvent(req) {
             from_time,
             to_time,
             description,
-            image
+            image,
+            is_main,
+            isPaid,
+            amount,
         })
         console.log(result[0])
         return {
@@ -113,7 +119,10 @@ export async function updateEvent(req) {
             location,
             description,
             sub_title,
-            image } = req.body;
+            image,
+            is_main,
+            isPaid,
+            amount, } = req.body;
 
         const event = await Events.findByPk(id);
         if (!event) return { message: "Event not found", data: null, statusCode: 404 };
@@ -127,7 +136,10 @@ export async function updateEvent(req) {
             location,
             description,
             sub_title,
-            image
+            image,
+            is_main,
+            isPaid,
+            amount
         });
         return { message: "Event updated successfully", data: null, statusCode: 200 };
     } catch (error) {
