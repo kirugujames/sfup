@@ -58,12 +58,12 @@ const getServerUrl = () => {
   if (process.env.RAILWAY_PUBLIC_DOMAIN) {
     return `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`;
   }
-  
+
   // Check if PUBLIC_URL is set
   if (process.env.PUBLIC_URL) {
     return process.env.PUBLIC_URL;
   }
-  
+
   // Fallback to localhost for development
   return `http://localhost:${PORT}`;
 };
@@ -82,7 +82,7 @@ const swaggerOptions = {
       description: "API documentation for Shikana Frontliner Party",
     },
     servers: [
-      { 
+      {
         url: BASE_URL,
         description: process.env.RAILWAY_ENVIRONMENT ? "Production Server" : "Development Server"
       }
@@ -140,6 +140,8 @@ Event.hasMany(Volunteer, { foreignKey: "event_id" });
 Volunteer.belongsTo(Event, { foreignKey: "event_id" });
 
 MemberRegistration.hasMany(Donation, { foreignKey: "member_id" });
+AuditTrail.belongsTo(User, { foreignKey: "user_id", as: "user" });
+User.hasMany(AuditTrail, { foreignKey: "user_id" });
 
 // Location relationships
 County.hasMany(Subcounty, { foreignKey: "county_id", onDelete: "CASCADE" });

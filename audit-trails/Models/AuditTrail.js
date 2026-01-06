@@ -17,6 +17,14 @@ const AuditTrail = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        entity: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        description: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
         details: {
             type: DataTypes.TEXT,
             allowNull: true,

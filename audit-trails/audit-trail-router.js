@@ -33,13 +33,20 @@ const router = express.Router();
  *                     properties:
  *                       id:
  *                         type: integer
- *                       user_id:
- *                         type: integer
+ *                       user:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: integer
+ *                           name:
+ *                             type: string
  *                       action:
  *                         type: string
- *                       details:
+ *                       entity:
  *                         type: string
- *                       ip_address:
+ *                       description:
+ *                         type: string
+ *                       ipAddress:
  *                         type: string
  *                       createdAt:
  *                         type: string

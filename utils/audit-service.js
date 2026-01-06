@@ -17,6 +17,23 @@ export const auditMiddleware = (actionName) => {
                     });
 
                     const action = actionName || `${req.method} ${req.originalUrl}`;
+
+                    // Simple logic to extract entity from action name or URL
+                    let entity = "Unknown";
+                    if (actionName) {
+                        const parts = actionName.split('_');
+                        if (parts.length > 0) {
+                            entity = parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase();
+                        }
+                    } else {
+                        const pathParts = req.originalUrl.split('/');
+                        if (pathParts.length > 2) {
+                            entity = pathParts[2].charAt(0).toUpperCase() + pathParts[2].slice(1).toLowerCase();
+                        }
+                    }
+
+                    const description = `${action.replace(/_/g, ' ')} performed on ${entity}`;
+
                     const details = JSON.stringify({
                         method: req.method,
                         url: req.originalUrl,
@@ -28,7 +45,7 @@ export const auditMiddleware = (actionName) => {
 
                     const ip_address = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-                    logAction(user_id, action, details, ip_address);
+                    logAction(user_id, action, description, entity, details, ip_address);
                 } catch (err) {
                     console.error("Audit log interceptor error:", err.message);
                 }
