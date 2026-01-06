@@ -139,7 +139,7 @@ export async function authenticateUser(req) {
     }
 
     // Optional: Send OTP if enabled
-    // await sendOtp(user.email);
+    await sendOtp(user.email);
 
     const data = {
       token: token,
