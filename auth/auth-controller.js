@@ -51,7 +51,7 @@ export async function registerUserAsMember(username, password, role_id, email) {
     await sendEmail({
       to: email,
       subject: "Welcome to Our Service",
-      message: `Hello , your member code is  ${username} and password  is ${password}, your account has been created successfully.`,
+      message: `Hello , your username is ${username} and password is ${password}, your account has been created successfully.`,
     });
 
     return {
