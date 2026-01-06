@@ -1,7 +1,9 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import dotenv from "dotenv";
 
 dotenv.config();
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 //method to send email
 export async function sendEmail(req) {
@@ -14,36 +16,21 @@ export async function sendEmail(req) {
   }
 
   try {
-    // Create a transporter using SMTP settings
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: parseInt(process.env.EMAIL_PORT) || 465,
-      secure: process.env.EMAIL_PORT == '465' || true, // use SSL if port is 465
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-      tls: {
-        // do not fail on invalid certs
-        rejectUnauthorized: false
-      }
-    });
+    const fromAddress = process.env.RESEND_FROM || 'Shikana Frontliners <onboarding@resend.dev>';
 
-    const mailOptions = {
-      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+    const data = await resend.emails.send({
+      from: fromAddress,
       to: req.to,
       subject: req.subject,
       text: req.message,
       html: `<p>${req.message}</p>`,
-    };
+    });
 
-    const info = await transporter.sendMail(mailOptions);
-
-    console.log("Email sent:", info.messageId);
+    console.log("Email sent:", data.id);
 
     return {
       success: true,
-      messageId: info.messageId,
+      messageId: data.id,
       status: 200,
     };
   } catch (error) {
