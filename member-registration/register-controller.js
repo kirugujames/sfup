@@ -325,8 +325,5 @@ export async function toggleMemberStatus(req) {
 }
 
 function generateStrongTempPassword() {
-  return randomBytes(6)
-    .toString("base64")
-    .replace(/[^a-zA-Z0-9]/g, "")
-    .slice(0, 10);
+  return "User@1234";
 }

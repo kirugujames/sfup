@@ -41,17 +41,17 @@ export async function registerUser(req) {
 }
 export async function registerUserAsMember(username, password, role_id, email) {
   try {
-    const existingUser = await User.findOne({ where: { username } });
+    const existingUser = await User.findOne({ where: { email } });
     if (existingUser)
       return { statusCode: 409, message: "Username already exists", data: null };
 
     const hashedPassword = await bcrypt.hash(password.trim(), 10);
-    const user = await User.create({ username, password: hashedPassword, email, role_id });
-
+    const user = await User.create({ email, password: hashedPassword, email, role_id });
+    console.log("user created", user);
     await sendEmail({
       to: email,
       subject: "Welcome to Our Service",
-      message: `Hello , your username is ${username} and password is ${password}, your account has been created successfully.`,
+      message: `Hello , your username is ${email} and password is ${password}, your account has been created successfully.`,
     });
 
     return {
